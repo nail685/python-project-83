@@ -1,9 +1,9 @@
 PORT ?= 8000
 start:
-	uv run waitress-serve -w 5 -b 0.0.0.0:$(PORT) page_analyzer:app
+	uv run gunicorn -w 5 -b 0.0.0.0:$(PORT) page_analyzer:app
 
 render-start:
-	waitress-serve -w 5 -b 0.0.0.0:$(PORT) page_analyzer:app
+	gunicorn -w 5 -b 0.0.0.0:$(PORT) page_analyzer:app
 
 install:
 	uv sync

@@ -41,21 +41,20 @@
                 </tr>
             </thead>
             <tbody>
-                {% if data_base %}
-                {% for url in data_base %}
+                {% if checks_url %}
+                {% for check in checks_url %}
                 <tr>
-                    <th>{{url.id| default('', true)}}</th>
-                    <th>{{url.response_code| default('', true)}}</th>
-                    <th>{{url.h1| default('', true)}}</th>
-                    <th>{{url.title| default('', true)}}</th>
-                    <th>{{url.description| default('', true)}}</th>
-                    <th>{{url.created_at.strftime('%Y-%m-%d')| default('', true)}}</th>
+                    <th>{{ check.id| default('', true) }}</th>
+                    <th>{{ check.status_code| default('', true) }}</th>
+                    <th>{{ check.h1| default('', true) }}</th>
+                    <th>{{ check.title| default('', true) }}</th>
+                    <th>{{ check.description| default('', true) }}</th>
+                    <th>{{ check.created_at.strftime('%Y-%m-%d')| default('', true) }}</th>
                 </tr>
                 {% endfor %}
                 {% endif %}
             </tbody>
         </table>
     </div>
-
 </div>
 {% endblock content %}

@@ -1,38 +1,75 @@
 import os
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
 from dotenv import load_dotenv
+from flask import Flask, flash, redirect, render_template, request, url_for
 
+from page_analyzer import database, tools
 
 load_dotenv()
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
+DATABASE_URL = os.getenv("DATABASE_URL")
+urls_repo = database.UrlsRepository(DATABASE_URL)
 
-
-@app.route('/')
-def index():
-    # flash('Страница успешно добавлена', 'success')
-    # flash('Некорректный URL', 'error')
-    # flash('Страница уже существует', 'info')
-    return render_template(
-        '/index.html',
-    )
 
 @app.errorhandler(404)
 def not_found(error):
     return render_template(
         '/error.html'), 404
 
+
+@app.route("/")
+def index():
+    url = request.args.get("url", "")
+    return render_template("index.html", url=url)
+
+
 @app.route('/urls')
 def get_urls():
+    urls = urls_repo.get_all_url()
     return render_template(
         '/urls.html',
+        urls=urls
     )
-    
-@app.route('/urls/<id>')
-def get_url(id):
+
+
+@app.route('/urls/<url_id>')
+def get_url(url_id):
+    url = urls_repo.get_url(url_id)
+    check_url = urls_repo.get_all_url_checks(url_id)
     return render_template(
         '/url.html',
-        id=id,
+        url=url, 
+        check_url=check_url,
     )
+
+
+@app.post('/urls')
+def new_url():
+    gotten_url = request.form.get("url")
+    url = tools.normalize_url(gotten_url)
+    if not tools.validate(url):
+        flash('Некорректный URL', category='error')
+        return render_template("index.html", url=gotten_url), 422
+    try:
+        url_id = urls_repo.save_url(url)
+    except database.URLError:
+        url_id = urls_repo.get_url_id(url)
+        flash('Страница уже существует', category='info')
+        redirect(url_for('get_url'), url_id=url_id)
+    flash("Страница успешно добавлена", category="success")
+    return redirect(url_for("get_url", url_id=url_id))    
+
+
+@app.post('/urls/<url_id>/checks')
+def check_url(url_id):
+    url = urls_repo.get_url(url_id).get('name')
+    response = tools.get_response(url)
+    if response is None:
+        flash("Произошла ошибка при проверке", category="error")
+        return redirect(url_for("get_url", url_id=url_id))
+    status_code = tools.get_status_code(response)
+    tags = tools.get_tags(response)
+    urls_repo.save_url_check(url_id, status_code, tags)
+    flash("Страница успешно проверена", category="success")
+    return redirect(url_for("get_url", url_id=url_id))

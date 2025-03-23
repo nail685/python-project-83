@@ -1,5 +1,5 @@
 DROP TABLE IF EXISTS urls;
-DROP TABLE IF EXISTS data_base;
+DROP TABLE IF EXISTS url_checks;
 
 CREATE TABLE if NOT EXISTS urls (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -7,11 +7,10 @@ CREATE TABLE if NOT EXISTS urls (
     created_at TIMESTAMP NOT NULL,
 );
 
-CREATE TABLE if NOT EXISTS data_base (
+CREATE TABLE if NOT EXISTS url_checks (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     id_url BIGINT REFERENCES urls(id) NOT NULL
-    name VARCHAR(50),
-    response_cod int NOT NULL,
+    status_code int NOT NULL,
     h1 VARCHAR(50),
     title VARCHAR(150),
     description VARCHAR(255),

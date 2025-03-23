@@ -1,0 +1,7 @@
+.env
+
+/.venv/
+
+.ruff_cache
+
+page_analyzer/__pycache__/

@@ -21,3 +21,7 @@ jobs:
       - name: Run linter
         run: |
           make linter
+      - uses: qltysh/qlty-action/coverage@main
+        with:
+          coverage-token: qltcp_0f1E6qK0kIebjjXP
+          files: target/lcov.info

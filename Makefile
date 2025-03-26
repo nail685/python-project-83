@@ -20,3 +20,5 @@ lint:
 build:
 	./build.sh
 
+test-coverage:
+	uv run pytest --cov=page_analyzer --cov-report xml

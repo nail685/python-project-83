@@ -190,6 +190,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "beautifulsoup4" },
+    { name = "coverage" },
     { name = "data" },
     { name = "flask" },
     { name = "gunicorn" },
@@ -210,6 +211,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "beautifulsoup4", specifier = ">=4.13.3" },
+    { name = "coverage", specifier = ">=7.6.12" },
     { name = "data", specifier = ">=0.4" },
     { name = "flask", specifier = ">=3.1.0" },
     { name = "gunicorn", specifier = ">=23.0.0" },

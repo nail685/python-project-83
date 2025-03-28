@@ -15,6 +15,7 @@ def normalize_url(url):
     hostname = url_parse.netloc
     return f'{scheme.lower()}://{hostname.lower()}'
 
+
 def get_response(url):
     try:
         response = requests.get(url)
@@ -22,6 +23,7 @@ def get_response(url):
     except requests.exceptions.RequestException:
         return None
     return response
+
 
 def get_status_code(response):
     return response.status_code

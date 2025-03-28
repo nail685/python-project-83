@@ -18,7 +18,7 @@ def not_found(error):
         '/error.html'), 404
 
 
-@app.route("/")
+@app.route('/')
 def index():
     url = request.args.get("url", "")
     return render_template("index.html", url=url)
@@ -33,7 +33,7 @@ def get_urls():
     )
 
 
-@app.route('/urls/<url_id>')
+@app.route('/urls/<int:url_id>')
 def get_url(url_id):
     url = urls_repo.get_url(url_id)
     check_url = urls_repo.get_all_url_checks(url_id)
@@ -56,7 +56,7 @@ def new_url():
     except database.URLError:
         url_id = urls_repo.get_url_id(url)
         flash('Страница уже существует', category='info')
-        redirect(url_for('get_url'), url_id=url_id)
+        return redirect(url_for("get_url", url_id=url_id))
     flash("Страница успешно добавлена", category="success")
     return redirect(url_for("get_url", url_id=url_id))    
 
@@ -70,6 +70,7 @@ def check_url(url_id):
         return redirect(url_for("get_url", url_id=url_id))
     status_code = tools.get_status_code(response)
     tags = tools.get_tags(response)
+    print(tags)
     urls_repo.save_url_check(url_id, status_code, tags)
     flash("Страница успешно проверена", category="success")
     return redirect(url_for("get_url", url_id=url_id))

@@ -45,21 +45,23 @@ class UrlsRepository:
         with DatabaseConnection(self.dsn) as cursor:
             query = """SELECT * FROM urls WHERE name=%s"""
             cursor.execute(query, (url,))
-        return cursor.fetchone()
+            return cursor.fetchone()
     
     def get_url(self, url_id):
         with DatabaseConnection(
             self.dsn, cursor_factory=RealDictCursor) as cursor:
             query = """SELECT id, name, created_at FROM urls WHERE id=%s"""
-            cursor.execute(query, (url_id,))      
-        return cursor.fetchone()
+            cursor.execute(query, (url_id,))
+            url = cursor.fetchone()
+        return url
     
     def get_url_id(self, url):
-        with DatabaseConnection(
-            self.dsn, cursor_factory=RealDictCursor) as cursor:
+        with DatabaseConnection(self.dsn) as cursor:
             query = """SELECT id FROM urls WHERE name=%s"""
-            cursor.execute(query, (url,))      
-        return cursor.fetchone()[0]
+            cursor.execute(query, (url,))
+            result = cursor.fetchone()
+            url_id = result[0]
+        return url_id
     
     def get_all_url(self):
         with DatabaseConnection(
@@ -76,7 +78,8 @@ class UrlsRepository:
                         ORDER BY created_at DESC
                         """
             cursor.execute(query)
-        return cursor.fetchall()
+            urls = cursor.fetchall()
+        return urls
     
     def save_url_check(self, url_id, status_code, tags):
         with DatabaseConnection(self.dsn) as cursor:
@@ -110,4 +113,5 @@ class UrlsRepository:
                        FROM url_checks WHERE url_id = %s
                        ORDER BY created_at DESC"""
             cursor.execute(query, (url_id,))
-        return cursor.fetchall()
+            url_checks = cursor.fetchall()
+        return url_checks

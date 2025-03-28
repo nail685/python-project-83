@@ -15,11 +15,6 @@ def normalize_url(url):
     hostname = url_parse.netloc
     return f'{scheme.lower()}://{hostname.lower()}'
 
-
-def get_status_code(response):
-    return response.status_code
-
-
 def get_response(url):
     try:
         response = requests.get(url)
@@ -28,14 +23,35 @@ def get_response(url):
         return None
     return response
 
+def get_status_code(response):
+    return response.status_code
+
 
 def get_tags(response):
-    soup = BeautifulSoup(response, 'html.parser')
-    title = soup.find('title').text or ''
-    h1 = soup.find('h1').text or ''
-    meta = soup.find('meta', {'name': "description"})
-    if meta['content']:
-        meta = meta['content']
+    soup = BeautifulSoup(response.text, 'html.parser')
+    
+    find_h1 = soup.find("h1")
+    if find_h1 is None:
+        h1 = ""
     else:
-        meta = ''
-    return {'h1': h1, 'title': title, 'description': meta}
+        h1 = find_h1.text
+        if len(h1) > 255:
+            h1 = h1[:254]
+            
+    find_title = soup.find("title")
+    if find_title is None:
+        title = ""
+    else:
+        title = find_title.text
+        if len(title) > 255:
+            title = title[:254]
+            
+    find_meta = soup.find("meta", {"name": "description"})
+    if find_meta and "content" in find_meta.attrs:
+        meta = find_meta["content"]
+        if len(meta) > 255:
+            meta = meta[:254]
+    else:
+        meta = ""
+
+    return {"h1": h1, "title": title, "description": meta}

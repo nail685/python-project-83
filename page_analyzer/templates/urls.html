@@ -21,7 +21,7 @@
                         <td>{{url.id}}</td>
                         <td><a href="{{ url_for('get_url', url_id=url.id) }}">{{ url.name| default('', true) }}</a></td>
                         <td>{{url.created_at.strftime('%Y-%m-%d')| default('', true)}}</td>
-                        <td>{{url.response_code| default('', true)}}</td>
+                        <td>{{url.status_code| default('', true)}}</td>
                     </tr>
                     {% endfor %}
                     {% endif %}

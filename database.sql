@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS url_checks;
 CREATE TABLE if NOT EXISTS urls (
     id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(50) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE if NOT EXISTS url_checks (
@@ -14,5 +14,5 @@ CREATE TABLE if NOT EXISTS url_checks (
     h1 VARCHAR(50),
     title VARCHAR(150),
     description VARCHAR(255),
-    created_at TIMESTAMP,
+    created_at TIMESTAMP
 );

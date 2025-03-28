@@ -70,7 +70,7 @@ class UrlsRepository:
                               MAX(url_checks.created_at) as last_check,
                               url_checks.status_code
                         FROM urls 
-                        LEFT JOINT url_checks
+                        LEFT JOIN url_checks
                         ON urls.id=url_checks.url_id
                         GROUP BY urls.id, url_checks.status_code
                         ORDER BY created_at DESC

@@ -6,4 +6,4 @@
 [![Maintainability](https://qlty.sh/badges/9289b5c3-0bad-4d22-a429-18524b6697a5/maintainability.svg)](https://qlty.sh/gh/nail685/projects/python-project-83)
 
 
-[Page analyzer](https://python-project-83-n15x.onrender.com/)
+[Page analyzer](https://python-project-83-iexy.onrender.com/)

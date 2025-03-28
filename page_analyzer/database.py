@@ -71,7 +71,7 @@ class UrlsRepository:
                               url_checks.status_code
                         FROM urls 
                         LEFT JOIN url_checks
-                        ON urls.id=url_checks.url_id
+                        ON urls.id = url_checks.url_id
                         GROUP BY urls.id, url_checks.status_code
                         ORDER BY created_at DESC
                         """

@@ -31,9 +31,9 @@ class UrlsRepository:
         self.dsn = dsn
 
     def save_url(self, url):
-        if self.existly_url(url):
+        if self.is_url_exist(url):
             raise URLError("Страница уже существует")
-
+        
         with DatabaseConnection(self.dsn) as cursor:
             add_url = """INSERT INTO urls (name, created_at)
                          VALUES (%s, %s) RETURNING id"""
@@ -41,12 +41,14 @@ class UrlsRepository:
             id = cursor.fetchone()[0]
         return id
     
-    def existly_url(self, url):
+    def is_url_exist(self, url):
         with DatabaseConnection(self.dsn) as cursor:
             query = """SELECT * FROM urls WHERE name=%s"""
             cursor.execute(query, (url,))
-            return cursor.fetchone()
-    
+            result = cursor.fetchone()
+            if result:
+                raise URLError("Страница уже существует")
+
     def get_url(self, url_id):
         with DatabaseConnection(
             self.dsn, cursor_factory=RealDictCursor) as cursor:

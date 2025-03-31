@@ -48,15 +48,16 @@ def get_url(url_id):
 def new_url():
     gotten_url = request.form.get("url")
     url = tools.normalize_url(gotten_url)
-    if not tools.validate(url):
+    if not tools.is_valid(url) or tools.get_response(url) is None:
         flash('Некорректный URL', category='error')
         return render_template("index.html", url=gotten_url), 422
     try:
-        url_id = urls_repo.save_url(url)
+        urls_repo.is_url_exist(url)
     except database.URLError:
         url_id = urls_repo.get_url_id(url)
         flash('Страница уже существует', category='info')
         return redirect(url_for("get_url", url_id=url_id))
+    url_id = urls_repo.save_url(url)
     flash("Страница успешно добавлена", category="success")
     return redirect(url_for("get_url", url_id=url_id))    
 
@@ -70,7 +71,6 @@ def check_url(url_id):
         return redirect(url_for("get_url", url_id=url_id))
     status_code = tools.get_status_code(response)
     tags = tools.get_tags(response)
-    print(tags)
     urls_repo.save_url_check(url_id, status_code, tags)
     flash("Страница успешно проверена", category="success")
     return redirect(url_for("get_url", url_id=url_id))

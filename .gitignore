@@ -4,4 +4,7 @@
 
 .ruff_cache
 
-page_analyzer/__pycache__/
+/__pycache__/
+
+/page_analyzer/__pycache__
+page_analyzer/__pycache__

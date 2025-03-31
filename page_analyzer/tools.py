@@ -5,7 +5,7 @@ import validators
 from bs4 import BeautifulSoup
 
 
-def validate(url):
+def is_valid(url):
     return (len(url) <= 255 and validators.url(url))
 
 
@@ -33,20 +33,14 @@ def get_tags(response):
     soup = BeautifulSoup(response.text, 'html.parser')
     
     find_h1 = soup.find("h1")
-    if find_h1 is None:
-        h1 = ""
-    else:
-        h1 = find_h1.text
-        if len(h1) > 255:
-            h1 = h1[:254]
+    h1 = '' if find_h1 is None else find_h1.text
+    if len(h1) > 255:
+        h1 = h1[:254]
             
     find_title = soup.find("title")
-    if find_title is None:
-        title = ""
-    else:
-        title = find_title.text
-        if len(title) > 255:
-            title = title[:254]
+    title = '' if find_title is None else find_title.text
+    if len(title) > 255:
+        title = title[:254]
             
     find_meta = soup.find("meta", {"name": "description"})
     if find_meta and "content" in find_meta.attrs:

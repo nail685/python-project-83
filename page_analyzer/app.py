@@ -48,7 +48,7 @@ def get_url(url_id):
 def new_url():
     gotten_url = request.form.get("url")
     url = tools.normalize_url(gotten_url)
-    if not tools.is_valid(url) or tools.get_response(url) is None:
+    if not tools.is_valid(url):
         flash('Некорректный URL', category='error')
         return render_template("index.html", url=gotten_url), 422
     try:

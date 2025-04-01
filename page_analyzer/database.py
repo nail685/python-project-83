@@ -4,10 +4,6 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 
 
-class URLError(Exception):
-    pass
-
-
 class DatabaseConnection:
     def __init__(self, dsn, cursor_factory=None):
         self.dsn = dsn
@@ -31,9 +27,6 @@ class UrlsRepository:
         self.dsn = dsn
 
     def save_url(self, url):
-        if self.is_url_exist(url):
-            raise URLError("Страница уже существует")
-        
         with DatabaseConnection(self.dsn) as cursor:
             add_url = """INSERT INTO urls (name, created_at)
                          VALUES (%s, %s) RETURNING id"""
@@ -46,8 +39,7 @@ class UrlsRepository:
             query = """SELECT * FROM urls WHERE name=%s"""
             cursor.execute(query, (url,))
             result = cursor.fetchone()
-            if result:
-                raise URLError("Страница уже существует")
+            return True if result else False
 
     def get_url(self, url_id):
         with DatabaseConnection(

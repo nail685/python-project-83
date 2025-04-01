@@ -33,14 +33,10 @@ def get_tags(response):
     soup = BeautifulSoup(response.text, 'html.parser')
     
     find_h1 = soup.find("h1")
-    h1 = '' if find_h1 is None else find_h1.text
-    if len(h1) > 255:
-        h1 = h1[:254]
-            
+    h1 = '' if find_h1 is None else find_h1.text[:254]
+          
     find_title = soup.find("title")
-    title = '' if find_title is None else find_title.text
-    if len(title) > 255:
-        title = title[:254]
+    title = '' if find_title is None else find_title.text[:254]
             
     find_meta = soup.find("meta", {"name": "description"})
     if find_meta and "content" in find_meta.attrs:

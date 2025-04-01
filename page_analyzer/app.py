@@ -51,9 +51,7 @@ def new_url():
     if not tools.is_valid(url):
         flash('Некорректный URL', category='error')
         return render_template("index.html", url=gotten_url), 422
-    try:
-        urls_repo.is_url_exist(url)
-    except database.URLError:
+    if urls_repo.is_url_exist(url):
         url_id = urls_repo.get_url_id(url)
         flash('Страница уже существует', category='info')
         return redirect(url_for("get_url", url_id=url_id))
